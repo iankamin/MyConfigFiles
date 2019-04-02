@@ -2,6 +2,10 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
+if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
+	exec tmux
+fi
+
 # If not running interactively, don't do anything
 case $- in
     *i*) ;;
@@ -57,7 +61,7 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 if [ "$color_prompt" = yes ]; then
-    PS1='\[\033[32m\] \u:\[\033[01;36m\]\w\]->  \[\033[37m\]'
+    PS1='\[\033[32m\]\u:\[\033[01;36m\]{\w}\]$  \[\033[37m\]'
 else
     PS1='${debian_chroot:+($debian_chroot)}:\w\ $  '
 fi
@@ -116,5 +120,8 @@ if ! shopt -oq posix; then
   fi
 fi
 
-cd /mnt/c/Users/kamin
-tmux
+PROMPT_COMMAND='echo -ne "\033]0;\007"'
+
+source ~/bin/tmuxCompletion.sh
+export PATH=$PATH:~/bin
+

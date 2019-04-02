@@ -54,6 +54,7 @@ set shiftwidth=4
 
 map <A-q> <Esc>
 inoremap jk <Esc>
+inoremap JK <Esc>
 
 map H 3b
 map J 10j
@@ -85,3 +86,10 @@ syntax enable
 if filereadable("/etc/vim/vimrc.local")
   source /etc/vim/vimrc.local
 endif
+
+"autocmd VimEnter * call system("set-title hszs" . "hdsa")
+autocmd VimEnter * let $titlestring = '/' . expand("%:t")
+autocmd VimEnter * :silent exec "! ~/bin/set-title $titlestring "
+
+autocmd VimLeave * :silent exec "! ~/bin/set-title "
+
